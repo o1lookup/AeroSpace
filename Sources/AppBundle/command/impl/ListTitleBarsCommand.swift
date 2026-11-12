@@ -19,7 +19,7 @@ struct ListTitleBarsCommand: Command {
 }
 
 @MainActor
-private func collectTitleBars(_ node: TreeNode, workspace: String, focusedWindow: Window?, into result: inout [TitleBarJson]) {
+func collectTitleBars(_ node: TreeNode, workspace: String, focusedWindow: Window?, into result: inout [TitleBarJson]) {
     if let rect = node.lastAppliedTitleRect, let parent = node.parent as? TilingContainer {
         let window = node as? Window
         let container = node as? TilingContainer
@@ -50,7 +50,7 @@ private func collectTitleBars(_ node: TreeNode, workspace: String, focusedWindow
 /// The same value as `%{window-parent-container-id}` for the window's parent
 func treeNodeId(_ node: TreeNode) -> Int64 { Int64(ObjectIdentifier(node).hashValue) }
 
-private struct TitleBarJson: Encodable {
+struct TitleBarJson: Codable, Sendable, Equatable {
     let workspace: String
     let kind: String // "window" | "container"
     let windowId: UInt32?

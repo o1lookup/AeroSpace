@@ -47,6 +47,21 @@ final class AxSubscription {
         return result
     }
 
+    /// Fork: best-effort subscription to a single notification. Unlike `bulkSubscribe`, a failure doesn't
+    /// prevent window registration (some apps don't support every notification)
+    static func optionalSubscribe(
+        _ nsApp: NSRunningApplication,
+        _ ax: AXUIElement,
+        _ handler: AXObserverCallback,
+        _ notifKey: String,
+    ) -> AxSubscription? {
+        guard let obs = unsafe AXObserver.new(nsApp.processIdentifier, handler) else { return nil }
+        let subscription = AxSubscription(obs: obs, ax: ax)
+        guard (try? subscription.subscribe(notifKey)) == true else { return nil }
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(obs), .defaultMode)
+        return subscription
+    }
+
     deinit {
         axThreadToken.checkEquals(axTaskLocalAppThreadToken)
         CFRunLoopRemoveSource(CFRunLoopGetCurrent(), AXObserverGetRunLoopSource(obs), .defaultMode)

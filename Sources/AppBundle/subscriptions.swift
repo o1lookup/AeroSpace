@@ -30,12 +30,17 @@ func handleSubscribeAndWaitTillError(_ connection: NWConnection, _ args: Subscri
                         workspace: f.workspace.name,
                         monitorId_oneBased: f.workspace.workspaceMonitor.monitorId_oneBased ?? 0,
                     )
+                case .layoutChanged:
+                    event = .layoutChanged(await buildLayoutSnapshot())
                 case .windowDetected, .bindingTriggered: continue
             }
             if await connection.writeAtomic(event, jsonEncoder).error != nil {
                 return
             }
         }
+        // Fork: the initial snapshot is built with suspension points, so a concurrent broadcast could have been
+        // delivered before it. Send one more, built after this subscriber was registered: it arrives last
+        if args.events.contains(.layoutChanged) { forceLayoutChangedBroadcast() }
     }
 
     // Keep connection alive - wait for client to disconnect
@@ -47,6 +52,11 @@ private let jsonEncoder: JSONEncoder = {
     e.outputFormatting = [.withoutEscapingSlashes, .sortedKeys]
     return e
 }()
+
+@MainActor
+func hasSubscribers(for eventType: ServerEventType) -> Bool {
+    subscribers.values.contains { $0.events.contains(eventType) }
+}
 
 func broadcastEvent(_ event: ServerEvent) {
     Task.startUnstructured { @MainActor in

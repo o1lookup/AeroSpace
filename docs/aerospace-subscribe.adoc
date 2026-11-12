@@ -50,6 +50,12 @@ window-detected:: Fired when a new window is detected. Includes `windowId`, `wor
 
 binding-triggered:: Fired when a keyboard binding is triggered. Includes `binding`, `mode`.
 
+layout-changed:: Fork. Fired after a layout pass or a window title change, only if something changed.
+Includes `layout`: `focused-window-id`, `focused-workspace`, `monitors` (`monitor-id`, `monitor-name`, `visible-workspace`),
+`workspaces` (visible and non-empty ones: `workspace`, `monitor-id`, `is-visible`, `windows` in tree order with
+`window-id`, `app-name`, `app-bundle-id`, `app-pid`, `title` (visible workspaces only), `parent-container-id`, `parent-layout`, `is-fullscreen`)
+and `title-bars` (the same objects as `aerospace list-title-bars` prints).
+
 // =========================================================== Output Format
 include::util/conditional-output-format-header.adoc[]
 

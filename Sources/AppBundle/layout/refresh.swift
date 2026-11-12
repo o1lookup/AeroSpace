@@ -82,6 +82,8 @@ func runLightSession<T>(
         if !event.isFocusFollowsMouse { try await layoutWorkspaces() }
         if focusBefore != focusAfter {
             focusAfter?.nativeFocus() // syncFocusToMacOs
+            // Fork: no layout pass for focus-follows-mouse, push the focus change to `layout-changed` subscribers
+            if event.isFocusFollowsMouse { scheduleLayoutChangedBroadcast() }
         }
         if !event.isFocusFollowsMouse { scheduleCancellableCompleteRefreshSession(event) }
         return result
@@ -199,6 +201,7 @@ private func layoutWorkspaces() async throws {
             try await (window as! MacWindow).hideInCorner(corner) // todo as!
         }
     }
+    scheduleLayoutChangedBroadcast() // Fork: push the new layout to `subscribe layout-changed` clients
 }
 
 @MainActor

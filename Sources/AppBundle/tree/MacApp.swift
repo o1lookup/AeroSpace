@@ -378,8 +378,13 @@ private final class AxWindow {
             (movedObs, [kAXMovedNotification]),
             (resizedObs, [kAXResizedNotification]),
         ]
-        let subscriptions = try unsafe AxSubscription.bulkSubscribe(nsApp, ax, job, handlers)
-        return !subscriptions.isEmpty ? AxWindow(windowId: windowId, ax, subscriptions) : nil
+        var subscriptions = try unsafe AxSubscription.bulkSubscribe(nsApp, ax, job, handlers)
+        if subscriptions.isEmpty { return nil }
+        // Fork: title changes only update `layout-changed` subscribers (overlay title bars). Optional
+        if let titleSubscription = unsafe AxSubscription.optionalSubscribe(nsApp, ax, titleChangedObs, kAXTitleChangedNotification) {
+            subscriptions.append(titleSubscription)
+        }
+        return AxWindow(windowId: windowId, ax, subscriptions)
     }
 }
 
