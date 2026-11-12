@@ -122,6 +122,7 @@ extension String {
                     case .windowIsFullscreen: .success(.bool(w.isFullscreen))
                     case .windowTitle: .success(.string(title))
                     case .windowLayout, .windowParentContainerLayout: toLayoutResult(w: w)
+                    case .windowParentContainerId: toParentIdResult(w: w)
                 }
             case (.workspace(let w), .workspace(let f)):
                 return switch f {
@@ -168,6 +169,14 @@ private func toLayoutString(tc: TilingContainer) -> String {
         case (.accordion, .h): return LayoutCmdArgs.LayoutDescription.h_accordion.rawValue
         case (.accordion, .v): return LayoutCmdArgs.LayoutDescription.v_accordion.rawValue
     }
+}
+
+// Process-stable identity of the window's immediate parent node. Equal iff two windows
+// are siblings in the same container. Not persistent across AeroSpace restarts (that's fine
+// for grouping within a single query).
+private func toParentIdResult(w: Window) -> Result<Primitive, String> {
+    guard let parent = w.parent else { return .failure("NULL-PARENT") }
+    return .success(.int(ObjectIdentifier(parent).hashValue))
 }
 
 private func toLayoutResult(w: Window) -> Result<Primitive, String> {
