@@ -160,6 +160,7 @@ extension FormatVar {
                     case .windowIsFullscreen: .success(.bool(w.window.isFullscreen))
                     case .windowTitle: .success(.string(w.title.orDie("Title wasn't prefetched")))
                     case .windowLayout, .windowParentContainerLayout: toLayoutResult(w: w.window)
+                    case .windowParentContainerId: toParentIdResult(w: w.window)
                 }
             case (.workspace(let w), .workspace(let f)):
                 return switch f {
@@ -241,6 +242,14 @@ private func toLayoutString(tc: TilingContainer) -> String {
         case (.accordion, .h): return LayoutCmdArgs.LayoutDescription.h_accordion.rawValue
         case (.accordion, .v): return LayoutCmdArgs.LayoutDescription.v_accordion.rawValue
     }
+}
+
+// Process-stable identity of the window's immediate parent node. Equal iff two windows
+// are siblings in the same container. Not persistent across AeroSpace restarts (that's fine
+// for grouping within a single query).
+private func toParentIdResult(w: Window) -> Result<Primitive, InterVarExpansionError> {
+    guard let parent = w.parent else { return .failure(.nullParent("NULL-PARENT")) }
+    return .success(.int(Int64(ObjectIdentifier(parent).hashValue)))
 }
 
 private func toLayoutResult(w: Window) -> Result<Primitive, InterVarExpansionError> {

@@ -192,6 +192,10 @@ public enum FormatVar: RawRepresentable, Equatable, CaseIterable, Sendable {
         case windowTitle = "window-title"
         case windowLayout = "window-layout" // An alias for windowParentContainerLayout
         case windowParentContainerLayout = "window-parent-container-layout"
+        // Process-stable identity of the window's immediate parent container. Windows that
+        // share the same value are siblings in the same container. Useful for external tools
+        // that need to reconstruct the container grouping without guessing from geometry.
+        case windowParentContainerId = "window-parent-container-id"
     }
 
     public enum WorkspaceFormatVar: String, Equatable, CaseIterable, Sendable {
