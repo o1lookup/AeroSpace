@@ -45,6 +45,7 @@ struct Config: ConvenienceMutable {
     var autoReloadConfig: Bool = false
     var automaticallyUnhideMacosHiddenApps: Bool = false
     var accordionPadding: Int = 30
+    var titleBarHeight: Int = 0 // fork: i3-style title bars. 0 = disabled (upstream behavior)
     var enableNormalizationOppositeOrientationForNestedContainers: Bool = true
     var persistentWorkspaces: OrderedSet<String> = []
     var execOnWorkspaceChange: [String] = [] // todo deprecate

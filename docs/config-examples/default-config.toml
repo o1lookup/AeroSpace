@@ -26,6 +26,12 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # You can set 0 to disable the padding feature
 accordion-padding = 30
 
+# Fork: i3-style title bars. Height in points reserved above every window in a tiles container,
+# one row per child above a vertical accordion (i3 "stacked"), one row of tabs above a horizontal
+# accordion (i3 "tabbed"). Accordion padding is not used when enabled. 0 disables the feature.
+# Use `aerospace list-title-bars` to get the reserved rectangles.
+title-bar-height = 0
+
 # Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
 

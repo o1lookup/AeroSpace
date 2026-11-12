@@ -18,6 +18,10 @@ open class TreeNode: Equatable, AeroAny {
     // - move-mouse command
     // - focus-follows-mouse
     var lastAppliedLayoutPhysicalRect: Rect? = nil // with real inner gaps
+    // Fork: i3-style title bars (config.titleBarHeight > 0). The rect reserved for this node's title:
+    // own bar above a window in a tiles container, or this node's row/tab in its accordion parent's header.
+    // nil if the node has no title. Exposed via `list-title-bars`
+    var lastAppliedTitleRect: Rect? = nil
     final var unboundStacktrace: String? = nil
     var isBound: Bool { parent != nil } // todo drop, once https://github.com/nikitabobko/AeroSpace/issues/1215 is fixed
 

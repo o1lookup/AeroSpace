@@ -105,7 +105,9 @@ extension CGPoint {
         let target: TreeNode? = switch tree.layout {
             case .tiles:
                 tree.children.first(where: {
-                    (virtual ? $0.lastAppliedLayoutVirtualRect : $0.lastAppliedLayoutPhysicalRect)?.contains(point) == true
+                    (virtual ? $0.lastAppliedLayoutVirtualRect : $0.lastAppliedLayoutPhysicalRect)?.contains(point) == true ||
+                        // Fork: the title bar reserved above a window (title-bar-height > 0) belongs to that window
+                        (!virtual && $0.lastAppliedTitleRect?.contains(point) == true)
                 })
             case .accordion:
                 tree.mostRecentChild

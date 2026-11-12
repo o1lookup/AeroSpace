@@ -105,6 +105,8 @@ aerospace -h;
 
     | list-exec-env-vars
 
+    | list-title-bars
+
     | list-modes [--current|--json|--count]...
 
     | list-monitors [--focused [no] | --mouse [no] | --format <output_format> | --count | --json]...

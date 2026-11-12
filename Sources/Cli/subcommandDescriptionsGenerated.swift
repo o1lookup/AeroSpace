@@ -22,6 +22,7 @@ let subcommandDescriptions = [
     ["  list-exec-env-vars", "List environment variables that exec-* commands and callbacks are run with"],
     ["  list-modes", "Print a list of modes currently specified in the configuration"],
     ["  list-monitors", "Print monitors that satisfy conditions"],
+    ["  list-title-bars", "Print title bar rectangles reserved by the i3-style title-bar layout (fork)"],
     ["  list-windows", "Print windows that satisfy conditions"],
     ["  list-workspaces", "Print workspaces that satisfy conditions"],
     ["  macos-native-fullscreen", "Toggle macOS fullscreen for the focused window"],

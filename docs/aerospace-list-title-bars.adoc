@@ -1,0 +1,44 @@
+= aerospace-list-title-bars(1)
+include::util/man-attributes.adoc[]
+// tag::purpose[]
+:manpurpose: Print title bar rectangles reserved by the i3-style title-bar layout (fork)
+// end::purpose[]
+:manname: aerospace-list-title-bars
+
+// =========================================================== Synopsis
+== Synopsis
+[verse]
+// tag::synopsis[]
+aerospace list-title-bars [-h|--help]
+
+// end::synopsis[]
+
+// =========================================================== Description
+== Description
+
+// tag::body[]
+{manpurpose}
+
+Fork-only command. When `title-bar-height` config option is greater than zero, the layout engine reserves
+space for i3-style title bars:
+
+* A window in a `tiles` container gets a title bar of `title-bar-height` right above it.
+* A `v_accordion` container behaves like i3 "stacked": a header of one row per child above the content.
+* A `h_accordion` container behaves like i3 "tabbed": a header of one row split into tabs above the content.
+
+The command prints the reserved rectangles of visible workspaces as JSON array.
+Coordinates are global, in points, with the origin in the top-left corner of the main monitor.
+Each object contains: `workspace`, `kind` (`window` or `container`), `window-id` (for windows),
+`container-id`, `container-layout` and `leaf-window-ids` (for containers),
+`parent-container-id` (the same value as `%{window-parent-container-id}`), `parent-layout`, `index`,
+`is-most-recent` (the visible child of an accordion), `is-focused`, `x`, `y`, `width`, `height`.
+
+// =========================================================== Options
+include::util/conditional-options-header.adoc[]
+
+-h, --help:: Print help
+
+// end::body[]
+
+// =========================================================== Footer
+include::util/man-footer.adoc[]
